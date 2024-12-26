@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="postgres@aliyun" uuid="79632f2e-5780-4412-8958-17a3a945e6cb">
+    <data-source source="LOCAL" name="hongkong@113.44.45.254" uuid="9e6f0e25-9fc9-4097-805a-4a9e6120ae3a">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://121.40.228.214:5433/hongkong</jdbc-url>
+      <jdbc-url>jdbc:postgresql://113.44.45.254:55433/hongkong</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.host.port" />
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
