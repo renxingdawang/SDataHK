@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Heat Island Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<h1>Urban Heat Island Analysis</h1>
+<button id="analyzeButton">Analyze Urban Heat Island</button>
+<pre id="result">Click the button to see the result.</pre>
+
+<script>
+    document.getElementById('analyzeButton').addEventListener('click', function() {
+        // 定义请求数据
+        const requestData = {
+            Longitude: 114.109497, // 香港经度
+            Latitude: 22.396428,   // 香港纬度
+            Radius: 5000.0         // 半径 5000 米
+        };
+
+        // 发送 GET 请求到后端 API
+        fetch('/urban', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 显示结果在页面上
+                document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                // 处理错误
+                console.error('There was a problem with the fetch operation:', error);
+                document.getElementById('result').textContent = 'Error: ' + error.message;
+            });
+    });
+</script>
+</body>
+</html>

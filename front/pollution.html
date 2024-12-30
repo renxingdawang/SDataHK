@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POI Density Analysis</title>
+    <title>Pollution Sources Analysis</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -51,8 +51,8 @@
     </style>
 </head>
 <body>
-<h1>POI Density Analysis</h1>
-<form id="poiForm">
+<h1>Pollution Sources Analysis</h1>
+<form id="pollutionForm">
     <div>
         <label for="longitude">Longitude:</label>
         <input type="number" id="longitude" value="114.109497" required />
@@ -65,19 +65,19 @@
         <label for="radius">Radius (meters):</label>
         <input type="number" id="radius" value="5000.0" required />
     </div>
-    <button type="submit">Get POI Density</button>
+    <button type="submit">Get Pollution Sources</button>
 </form>
 
 <div id="loading" style="display: none;">Loading...</div>
 <div id="error" class="error"></div>
 
 <div id="results" style="display: none;">
-    <h2>POI Density Results</h2>
-    <ul id="densityList"></ul>
+    <h2>Pollution Sources</h2>
+    <ul id="pollutionList"></ul>
 </div>
 
 <script>
-    document.getElementById('poiForm').addEventListener('submit', async function (event) {
+    document.getElementById('pollutionForm').addEventListener('submit', async function (event) {
         event.preventDefault(); // 阻止表单默认提交行为
 
         // 获取输入值
@@ -92,7 +92,7 @@
 
         try {
             // 调用后端接口
-            const response = await fetch('/poi', {
+            const response = await fetch('/pollution', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -105,25 +105,25 @@
             });
 
             if (!response.ok) {
-                throw new Error('Failed to fetch POI density');
+                throw new Error('Failed to fetch pollution sources');
             }
 
             const data = await response.json();
 
             // 显示结果
-            if (data && data.densityByType) {
-                const densityList = document.getElementById('densityList');
-                densityList.innerHTML = ''; // 清空之前的列表
+            if (data && data.pollutionSources && data.pollutionSources.length > 0) {
+                const pollutionList = document.getElementById('pollutionList');
+                pollutionList.innerHTML = ''; // 清空之前的列表
 
-                for (const [poiType, density] of Object.entries(data.densityByType)) {
+                data.pollutionSources.forEach(source => {
                     const li = document.createElement('li');
-                    li.textContent = `${poiType}: ${density.toFixed(2)} (per square meter)`;
-                    densityList.appendChild(li);
-                }
+                    li.textContent = `${source.name} (Distance: ${source.distance.toFixed(2)} meters)`;
+                    pollutionList.appendChild(li);
+                });
 
                 document.getElementById('results').style.display = 'block';
             } else {
-                throw new Error('No POI density data found');
+                throw new Error('No pollution sources found within the specified radius');
             }
         } catch (error) {
             // 显示错误信息
