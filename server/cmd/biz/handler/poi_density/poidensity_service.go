@@ -14,7 +14,12 @@ import (
 // @router /poi [GET]
 func GetPOIDensity(ctx context.Context, c *app.RequestContext) {
 	//var err error
-	var req poi.POIDensityRequest
+	//var req poi.POIDensityRequest
+	req := poi.POIDensityRequest{
+		Longitude: 114.109497, // 香港经度
+		Latitude:  22.396428,  // 香港纬度
+		Radius:    5000.0,     // 半径 5000 米
+	}
 	err := c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())

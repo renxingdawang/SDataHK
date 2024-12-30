@@ -14,11 +14,11 @@ import (
 // @router /police [GET]
 func GetNearestPoliceStations(ctx context.Context, c *app.RequestContext) {
 	//var err error
-	var req police.Location
-	//req := police.Location{
-	//	Latitude:  22.29,  // 示例纬度，你可以根据需要修改
-	//	Longitude: 114.15, // 示例经度，你可以根据需要修改
-	//}
+	//var req police.Location
+	req := police.Location{
+		Latitude:  22.29,  // 示例纬度，你可以根据需要修改
+		Longitude: 114.15, // 示例经度，你可以根据需要修改
+	}
 	err := c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
