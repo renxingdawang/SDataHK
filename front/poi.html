@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nearest Police Stations</title>
+    <title>POI Density Analysis</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -46,42 +46,44 @@
             padding: 0;
         }
         li {
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
-<h1>Find Nearest Police Stations</h1>
-<form id="policeForm">
+<h1>POI Density Analysis</h1>
+<form id="poiForm">
     <div>
         <label for="latitude">Latitude:</label>
-        <input type="number" step="0.00001" id="latitude" required />
+        <input type="number" id="latitude" value="22.396428" required />
     </div>
     <div>
         <label for="longitude">Longitude:</label>
-        <input type="number" step="0.00001" id="longitude" required />
+        <input type="number" id="longitude" value="114.109497" required />
     </div>
-    <button type="submit">Find Police Stations</button>
+    <div>
+        <label for="radius">Radius (meters):</label>
+        <input type="number" id="radius" value="1000.0" required />
+    </div>
+    <button type="submit">Get POI Density</button>
 </form>
 
 <div id="loading" style="display: none;">Loading...</div>
 <div id="error" class="error"></div>
 
 <div id="results" style="display: none;">
-    <h2>Nearest Police Stations</h2>
-    <ul id="stationList"></ul>
+    <h2>POI Density Results</h2>
+    <ul id="densityList"></ul>
 </div>
 
 <script>
-    document.getElementById('policeForm').addEventListener('submit', async function (event) {
+    document.getElementById('poiForm').addEventListener('submit', async function (event) {
         event.preventDefault(); // 阻止表单默认提交行为
 
         // 获取输入值
         const latitude = parseFloat(document.getElementById('latitude').value);
         const longitude = parseFloat(document.getElementById('longitude').value);
+        const radius = parseFloat(document.getElementById('radius').value);
 
         // 显示加载状态
         document.getElementById('loading').style.display = 'block';
@@ -90,30 +92,27 @@
 
         try {
             // 调用后端接口
-            const response = await fetch(`http://localhost:18005/police?latitude=${latitude}&longitude=${longitude}`);
+            const response = await fetch(`http://localhost:18005/poi?latitude=${latitude}&longitude=${longitude}&radius=${radius}`);
             if (!response.ok) {
-                throw new Error('Failed to fetch police stations');
+                throw new Error('Failed to fetch POI density');
             }
 
             const data = await response.json();
 
             // 显示结果
-            if (data && data.stations && data.stations.length > 0) {
-                const stationList = document.getElementById('stationList');
-                stationList.innerHTML = ''; // 清空之前的列表
+            if (data.densityByType) {
+                const densityList = document.getElementById('densityList');
+                densityList.innerHTML = ''; // 清空之前的列表
 
-                data.stations.forEach(station => {
+                for (const [type, density] of Object.entries(data.densityByType)) {
                     const li = document.createElement('li');
-                    li.innerHTML = `
-              <strong>${station.name}</strong><br>
-              Latitude: ${station.latitude}, Longitude: ${station.longitude}
-            `;
-                    stationList.appendChild(li);
-                });
+                    li.textContent = `${type}: ${density.toFixed(2)} (per square meter)`;
+                    densityList.appendChild(li);
+                }
 
                 document.getElementById('results').style.display = 'block';
             } else {
-                throw new Error('No police stations found');
+                throw new Error('No data found');
             }
         } catch (error) {
             // 显示错误信息

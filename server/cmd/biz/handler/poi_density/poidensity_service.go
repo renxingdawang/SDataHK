@@ -14,12 +14,7 @@ import (
 // @router /poi [GET]
 func GetPOIDensity(ctx context.Context, c *app.RequestContext) {
 	//var err error
-	//var req poi.POIDensityRequest
-	req := poi.POIDensityRequest{
-		Latitude:  22.396428,
-		Longitude: 114.109497,
-		Radius:    1000.0,
-	}
+	var req poi.POIDensityRequest
 	err := c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
