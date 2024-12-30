@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Police Station Finder</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .station {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="app" class="container">
+    <h1>Find Nearest Police Stations</h1>
+    <div class="form-group">
+        <label for="latitude">Latitude:</label>
+        <input type="number" step="0.000001" v-model="latitude" id="latitude" placeholder="Enter latitude">
+    </div>
+    <div class="form-group">
+        <label for="longitude">Longitude:</label>
+        <input type="number" step="0.000001" v-model="longitude" id="longitude" placeholder="Enter longitude">
+    </div>
+    <div class="form-group">
+        <button @click="findPoliceStations">Find Police Stations</button>
+    </div>
+    <div class="results" v-if="stations.length">
+        <h2>Nearest Police Stations</h2>
+        <div class="station" v-for="station in stations" :key="station.name">
+            <p><strong>Name:</strong> {{ station.name }}</p>
+        </div>
+    </div>
+    <div v-if="error" style="color: red;">
+        <p>{{ error }}</p>
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            latitude: 22.29, // Default latitude
+            longitude: 114.15, // Default longitude
+            stations: [],
+            error: ""
+        },
+        methods: {
+            findPoliceStations() {
+                const req = {
+                    latitude: this.latitude,
+                    longitude: this.longitude
+                };
+
+                // Replace 'http://localhost:8080' with your actual backend API endpoint
+                axios.post('http://localhost:18005/police', req)
+                    .then(response => {
+                        if (response.data.status === "success") {
+                            this.stations = response.data.data;
+                            this.error = "";
+                        } else {
+                            this.error = "Failed to fetch police stations.";
+                        }
+                    })
+                    .catch(err => {
+                        this.error = "Error: " + err.message;
+                        this.stations = [];
+                    });
+            }
+        }
+    });
+</script>
+</body>
+</html>
