@@ -47,13 +47,15 @@
             Radius: 5000.0         // 半径 5000 米
         };
 
+        // 将数据转换为查询参数
+        const queryParams = new URLSearchParams(requestData).toString();
+
         // 发送 GET 请求到后端 API
-        fetch('/urban', {
+        fetch(`/urban?${queryParams}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestData)
+            }
         })
             .then(response => {
                 if (!response.ok) {
