@@ -4,7 +4,7 @@ package water_pollution
 
 import (
 	"context"
-	service "github.com/renxingdawang/SDataHK/biz/service/police"
+	service "github.com/renxingdawang/SDataHK/biz/service/pollution"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
