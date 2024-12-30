@@ -4,11 +4,18 @@ package main
 
 import (
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/renxingdawang/SDataHK/biz/dal"
 )
 
+func Init() {
+	dal.Init()
+}
 func main() {
-	h := server.Default()
-
+	Init()
+	h := server.Default(
+		server.WithStreamBody(true),
+		server.WithHostPorts("127.0.0.1:18005"),
+	)
 	register(h)
 	h.Spin()
 }

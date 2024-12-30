@@ -4,7 +4,29 @@ package police_service
 
 import (
 	"context"
+	service "github.com/renxingdawang/SDataHK/biz/service/police"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	police "github.com/renxingdawang/SDataHK/biz/model/police_service"
 )
+
+// GetNearestPoliceStations .
+// @router /police [GET]
+func GetNearestPoliceStations(ctx context.Context, c *app.RequestContext) {
+	//var err error
+	var req police.Location
+	err := c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp, err := service.NewPoliceService(ctx, c).GetNearestPoliceStations(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	c.JSON(consts.StatusOK, resp)
+
+}

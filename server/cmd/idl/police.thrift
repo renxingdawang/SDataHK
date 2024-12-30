@@ -17,5 +17,5 @@ struct NearestPoliceStationsResponse {
 }
 
 service PoliceService {
-  NearestPoliceStationsResponse getNearestPoliceStations(1: Location userLocation);
+  NearestPoliceStationsResponse getNearestPoliceStations(1: Location userLocation)(api.get="/police");
 }
