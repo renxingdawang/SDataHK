@@ -195,10 +195,7 @@ func (p *Location) String() string {
 }
 
 type PoliceStation struct {
-	Name     string    `thrift:"name,1" form:"name" json:"name" query:"name"`
-	Location *Location `thrift:"location,2" form:"location" json:"location" query:"location"`
-	// 距离单位：米
-	Distance float64 `thrift:"distance,3" form:"distance" json:"distance" query:"distance"`
+	Name string `thrift:"name,1" form:"name" json:"name" query:"name"`
 }
 
 func NewPoliceStation() *PoliceStation {
@@ -212,27 +209,8 @@ func (p *PoliceStation) GetName() (v string) {
 	return p.Name
 }
 
-var PoliceStation_Location_DEFAULT *Location
-
-func (p *PoliceStation) GetLocation() (v *Location) {
-	if !p.IsSetLocation() {
-		return PoliceStation_Location_DEFAULT
-	}
-	return p.Location
-}
-
-func (p *PoliceStation) GetDistance() (v float64) {
-	return p.Distance
-}
-
 var fieldIDToName_PoliceStation = map[int16]string{
 	1: "name",
-	2: "location",
-	3: "distance",
-}
-
-func (p *PoliceStation) IsSetLocation() bool {
-	return p.Location != nil
 }
 
 func (p *PoliceStation) Read(iprot thrift.TProtocol) (err error) {
@@ -257,22 +235,6 @@ func (p *PoliceStation) Read(iprot thrift.TProtocol) (err error) {
 		case 1:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 2:
-			if fieldTypeId == thrift.STRUCT {
-				if err = p.ReadField2(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		case 3:
-			if fieldTypeId == thrift.DOUBLE {
-				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -318,25 +280,6 @@ func (p *PoliceStation) ReadField1(iprot thrift.TProtocol) error {
 	p.Name = _field
 	return nil
 }
-func (p *PoliceStation) ReadField2(iprot thrift.TProtocol) error {
-	_field := NewLocation()
-	if err := _field.Read(iprot); err != nil {
-		return err
-	}
-	p.Location = _field
-	return nil
-}
-func (p *PoliceStation) ReadField3(iprot thrift.TProtocol) error {
-
-	var _field float64
-	if v, err := iprot.ReadDouble(); err != nil {
-		return err
-	} else {
-		_field = v
-	}
-	p.Distance = _field
-	return nil
-}
 
 func (p *PoliceStation) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -346,14 +289,6 @@ func (p *PoliceStation) Write(oprot thrift.TProtocol) (err error) {
 	if p != nil {
 		if err = p.writeField1(oprot); err != nil {
 			fieldId = 1
-			goto WriteFieldError
-		}
-		if err = p.writeField2(oprot); err != nil {
-			fieldId = 2
-			goto WriteFieldError
-		}
-		if err = p.writeField3(oprot); err != nil {
-			fieldId = 3
 			goto WriteFieldError
 		}
 	}
@@ -389,40 +324,6 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *PoliceStation) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("location", thrift.STRUCT, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := p.Location.Write(oprot); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
-}
-
-func (p *PoliceStation) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("distance", thrift.DOUBLE, 3); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteDouble(p.Distance); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
 func (p *PoliceStation) String() string {

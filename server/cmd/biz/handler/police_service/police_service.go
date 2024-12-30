@@ -16,6 +16,7 @@ import (
 func GetNearestPoliceStations(ctx context.Context, c *app.RequestContext) {
 	//var err error
 	var req police.Location
+
 	err := c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())

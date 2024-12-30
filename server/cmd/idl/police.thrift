@@ -7,8 +7,6 @@ struct Location {
 
 struct PoliceStation {
   1: string name;
-  2: Location location;
-  3: double distance; // 距离单位：米
 }
 
 struct NearestPoliceStationsResponse {
