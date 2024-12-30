@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/plsqls/al/green.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/plsqls/al/landuse.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/plsqls/al/mark.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/plsqls/al/school.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/plsqls/al/typhoon.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/plsqls/answers.sql" dialect="PostgreSQL" />
   </component>
 </project>
